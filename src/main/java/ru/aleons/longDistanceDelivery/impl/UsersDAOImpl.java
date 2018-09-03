@@ -35,17 +35,32 @@ public class UsersDAOImpl implements UsersDAO {
     }
 
     @Override
-    public void update(User oldUser, User newUser) {
-//        String _query = "update User set password = '"+newUser.getPassword()+"', " +
-//                        "role = '"+newUser.getRole()+"', " +
-//                        "tel = '"+newUser.getTel()+"'";
-//        em.getTransaction().begin();
-//        try {
-//            if(em.find(User.class, oldUser.getLogin()).getLogin()!=null){
-//                Query query = em.createQuery(_query);
-//                query.executeUpdate();
-//            }
-//        }
+    public void delete(User user) {
+        em.getTransaction().begin();
+        try {
+            em.remove(user);
+            em.getTransaction().commit();
+        }
+        catch (PersistenceException e){
+            System.out.println(e);
+            em.getTransaction().rollback();
+        }
+    }
+
+    @Override
+    public void update(String login, User newUser) {
+        em.getTransaction().begin();
+        try {
+            User user = findByLogin(login);
+            user.setPassword(newUser.getPassword());
+            user.setAverageLevel(newUser.getAverageLevel());
+            user.setTel(newUser.getTel());
+            em.getTransaction().commit();
+        }
+        catch (PersistenceException e){
+            System.out.println(e);
+            em.getTransaction().rollback();
+        }
 
     }
 

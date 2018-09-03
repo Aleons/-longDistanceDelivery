@@ -9,8 +9,6 @@ import ru.aleons.longDistanceDelivery.dao.UsersDAO;
 import ru.aleons.longDistanceDelivery.impl.UsersDAOImpl;
 import ru.aleons.longDistanceDelivery.model.Contractor;
 import ru.aleons.longDistanceDelivery.model.User;
-
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -77,6 +75,32 @@ public class UserDaoTest {
         usersDAO.add(user);
         System.out.println(em.find(User.class,"test").getPassword());
         assertThat(hashPassword,equalTo(em.find(User.class,"test").getPassword()));
+    }
+
+    @Test(description = "check delete user")
+    void checkDeleteUser(){
+        UsersDAO usersDAO = new UsersDAOImpl(em);
+        User user = new Contractor("tester","qwerty77","222",2.1);
+        usersDAO.add(user);
+        assertThat(user,equalTo(em.find(User.class,"tester")));
+        usersDAO.delete(user);
+        assertThat(user,not(em.find(User.class,"tester")));
+    }
+
+    @Test(description = "check update User")
+    void checkUpdateUser(){
+        UsersDAO usersDAO = new UsersDAOImpl(em);
+        User user = new Contractor("tester","qwerty77","222",2.1);
+        String oldPassword = user.getPassword();
+        usersDAO.add(user);
+        assertThat(user,equalTo(em.find(User.class,"tester")));
+        user.setPassword("qwerty88");
+        user.setTel("333");
+        user.setAverageLevel(3.2);
+        usersDAO.update(user.getLogin(),user);
+        assertThat(oldPassword,not(em.find(User.class,"tester").getPassword()));
+
+
     }
 
 
