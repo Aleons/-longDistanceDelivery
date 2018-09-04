@@ -4,15 +4,15 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
 @Table(name = "STATEMENT")
-public class Statement {
+public abstract class Statement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @Column(length = 40)
-    private String type;
-    @Column(length = 30)
     private Date date;
     @Column(length = 100)
     private String city;
@@ -27,9 +27,8 @@ public class Statement {
 
     }
 
-    public Statement(User user, String type, Date date, String city, String bounty) {
+    public Statement(User user, Date date, String city, String bounty) {
         this.user = user;
-        this.type = type;
         this.date = date;
         this.city = city;
         this.bounty = bounty;
@@ -41,14 +40,6 @@ public class Statement {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Date getDate() {

@@ -64,13 +64,4 @@ public class UsersDAOImpl implements UsersDAO {
 
     }
 
-    @Override
-    public void complement(User user, String tel) {
-
-    }
-
-    @Override
-    public void estimate(User user, double averageLevel) {
-
-    }
 }

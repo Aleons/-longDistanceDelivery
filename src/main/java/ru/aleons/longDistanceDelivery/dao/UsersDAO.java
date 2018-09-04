@@ -8,7 +8,5 @@ public interface UsersDAO {
     void add(User user);
     void delete(User user);
     void update(String login, User newUser);
-    void complement(User user, String tel);
-    void estimate (User user, double averageLevel);
 
 }

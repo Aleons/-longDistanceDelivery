@@ -4,32 +4,54 @@ import ru.aleons.longDistanceDelivery.dao.StatementDAO;
 import ru.aleons.longDistanceDelivery.model.Statement;
 import ru.aleons.longDistanceDelivery.model.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import java.util.Date;
 
 public class StatementDAOImpl implements StatementDAO {
+
+    private EntityManager em;
+
+    public StatementDAOImpl(EntityManager em) {
+        this.em = em;
+    }
+
     @Override
     public Statement findByStatements(User user) {
-        return null;
+        return em.find(Statement.class, user);
     }
 
     @Override
     public Statement findByStatements(Date date) {
-        return null;
+        return em.find(Statement.class, date);
     }
 
     @Override
     public Statement findByStatements(String city) {
-        return null;
+        return em.find(Statement.class, city);
     }
 
     @Override
     public Statement findByStatement(int id) {
-        return null;
+        return em.find(Statement.class, id);
+
     }
 
     @Override
     public void add(User user, String city, Date date) {
-
+        Statement statement = new Statement();
+        statement.setUser(user);
+        statement.setCity(city);
+        statement.setDate(date);
+        em.getTransaction().begin();
+        try {
+            em.persist(statement);
+            em.getTransaction().commit();
+        }
+        catch (PersistenceException e){
+            System.out.println(e);
+            em.getTransaction().rollback();
+        }
     }
 
     @Override
